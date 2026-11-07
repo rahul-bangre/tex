@@ -1,0 +1,286 @@
+/* tex — tokens and shared components. See DESIGN.md. */
+
+:root {
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-serif: "Source Serif 4 Variable", "New York", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+
+  --bg: #ffffff;
+  --bg-side: #f7f7f8;
+  --bg-raised: #ffffff;
+  --bg-desk: #ececee;
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.14);
+  --text: #1b1b1f;
+  --text-2: #5e5e66;
+  --text-3: #9a9aa2;
+  --hover: rgba(0, 0, 0, 0.04);
+  --selected: rgba(0, 0, 0, 0.06);
+  --accent: #a8761a;
+  --accent-hover: #946715;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(168, 118, 26, 0.14);
+  --ok: #1f8a4c;
+  --warn: #b26a00;
+  --err: #cc3b30;
+  --selection: rgba(168, 118, 26, 0.2);
+  --flash: rgba(168, 118, 26, 0.16);
+  --shadow-pop: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 8px 28px rgba(0, 0, 0, 0.14);
+  --shadow-page: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --syn-cmd: #2f5fb3;
+  --syn-env: #1f7a55;
+  --syn-math: #9a6a00;
+  --syn-num: #9a6a00;
+  --syn-comment: #9a9aa2;
+  --syn-bracket: #6e6e76;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #18181a;
+    --bg-side: #1f1f22;
+    --bg-raised: #2a2a2e;
+    --bg-desk: #111113;
+    --line: rgba(255, 255, 255, 0.07);
+    --line-strong: rgba(255, 255, 255, 0.13);
+    --text: #ededef;
+    --text-2: #a0a0a8;
+    --text-3: #6b6b73;
+    --hover: rgba(255, 255, 255, 0.05);
+    --selected: rgba(255, 255, 255, 0.09);
+    --accent: #e2b04a;
+    --accent-hover: #ecbe5c;
+    --accent-ink: #1a1405;
+    --accent-soft: rgba(226, 176, 74, 0.14);
+    --ok: #5fc48a;
+    --warn: #e8a13a;
+    --err: #f0645a;
+    --selection: rgba(226, 176, 74, 0.22);
+    --flash: rgba(226, 176, 74, 0.2);
+    --shadow-pop: 0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 10px 32px rgba(0, 0, 0, 0.5);
+    --shadow-page: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.18);
+
+    --syn-cmd: #8ab4f8;
+    --syn-env: #7dd3a8;
+    --syn-math: #f2c46b;
+    --syn-num: #f2c46b;
+    --syn-comment: #6b6b73;
+    --syn-bracket: #8c8c94;
+
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 400 13px/20px var(--font-ui);
+  letter-spacing: -0.08px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+input,
+textarea,
+.cm-content {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+button {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+}
+
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-3);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex: none;
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out, color 0.12s ease-out;
+}
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+.btn.secondary {
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+.btn.secondary:hover {
+  background: var(--hover);
+}
+.btn.ghost:hover {
+  background: var(--hover);
+}
+.btn:active {
+  filter: brightness(0.95);
+}
+.btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.btn .kbd {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.6;
+  margin-left: 2px;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: var(--text-2);
+  flex: none;
+  transition: background 0.12s ease-out, color 0.12s ease-out;
+}
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.icon-btn.on {
+  color: var(--accent);
+}
+.icon-btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── Pane header: 36px, shared by every pane so rules line up ── */
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  flex: none;
+  padding: 0 8px 0 12px;
+  background: var(--bg-side);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  min-width: 0;
+}
+.pane-head .title {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.pane-head .spacer {
+  flex: 1;
+  min-width: 8px;
+}
+
+/* ── Floating surfaces ───────────────────────────────────── */
+
+.popover {
+  background: var(--bg-raised);
+  border-radius: 10px;
+  box-shadow: var(--shadow-pop);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+kbd {
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+@keyframes cm-flash {
+  0% {
+    background: var(--flash);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
